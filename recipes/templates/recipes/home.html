@@ -1,0 +1,38 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %}Início - Food Explorer{% endblock %}
+
+{% block content %}
+<section class="categories-bar">
+    <h2>Categorias</h2>
+    <div class="categories-list">
+        {% for cat in categories %}
+            <a href="{% url 'home' %}?category={{ cat.strCategory }}"
+               class="category-chip {% if cat.strCategory == category_filter %}active{% endif %}">
+                {{ cat.strCategory }}
+            </a>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="results">
+    {% if query %}
+        <h2>Resultados para "{{ query }}"</h2>
+    {% elif category_filter %}
+        <h2>Categoria: {{ category_filter }}</h2>
+    {% endif %}
+
+    {% if meals %}
+        <div class="meals-grid">
+            {% for meal in meals %}
+                <a href="{% url 'recipe_detail' meal.idMeal %}" class="meal-card">
+                    <img src="{{ meal.strMealThumb }}" alt="{{ meal.strMeal }}">
+                    <h3>{{ meal.strMeal }}</h3>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty">Nenhuma receita encontrada.</p>
+    {% endif %}
+</section>
+{% endblock %}

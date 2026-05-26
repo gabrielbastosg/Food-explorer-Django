@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Food Explorer{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'recipes/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'recipes/css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'recipes/css/recipe_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'recipes/css/favorites.css' %}">
+    <link rel="stylesheet" href="{% static 'recipes/css/login.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="logo">🍽️ Explorador de comida</a>
+
+        <form action="{% url 'home' %}" method="get" class="search-form">
+            <input type="text" name="q" placeholder="Buscar receita..." value="{{ request.GET.q|default:'' }}">
+            <button type="submit">Buscar</button>
+        </form>
+
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Início</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'favorites' %}">❤️ Favoritos ({{ favorite_count }})</a></li>
+                <li class="user-info">Olá, {{ user.username }}</li>
+                <li>
+                    <form action="{% url 'logout' %}" method="post" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit">Sair</button>
+                    </form>
+                </li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Entrar</a></li>
+                <li><a href="{% url 'register' %}">Cadastrar</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert-message alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>Dados fornecidos por <a href="https://www.themealdb.com" target="_blank">TheMealDB</a></p>
+    </footer>
+</body>
+</html>

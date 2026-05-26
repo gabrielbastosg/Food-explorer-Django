@@ -1,0 +1,24 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %}Entrar - Food Explorer{% endblock %}
+
+{% block content %}
+<section class="auth-box">
+    <h2>Entrar</h2>
+
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div class="form-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<small class="error">{{ field.errors|striptags }}</small>{% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn">Entrar</button>
+    </form>
+
+    <p class="auth-link">Ainda não tem conta? <a href="{% url 'register' %}">Cadastre-se</a></p>
+</section>
+{% endblock %}

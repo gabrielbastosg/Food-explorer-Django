@@ -1,0 +1,64 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %}{{ meal.strMeal }} - Food Explorer{% endblock %}
+
+{% block content %}
+<article class="recipe">
+    <div class="recipe-header">
+        <img src="{{ meal.strMealThumb }}" alt="{{ meal.strMeal }}" class="recipe-thumb">
+        <div class="recipe-info">
+            <h1>{{ meal.strMeal }}</h1>
+            <p class="recipe-meta">
+                {{ meal.strCategory }} · {{ meal.strArea }}
+            </p>
+
+            {% if user.is_authenticated %}
+                {% if is_favorited %}
+                    <a href="{% url 'remove_favorite' meal.idMeal %}" class="btn btn-fav active">❤️ Remover dos favoritos</a>
+                {% else %}
+                    <a href="{% url 'add_favorite' meal.idMeal %}" class="btn btn-fav">🤍 Adicionar aos favoritos</a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-fav">Entrar para favoritos</a>
+            {% endif %}
+
+            {% if meal.strTags %}
+                <div class="tags">
+                    <span class="tag">{{ meal.strTags }}</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <section class="ingredients">
+        <h2>Ingredientes</h2>
+        <ul>
+            {% for item in ingredients %}
+                <li><strong>{{ item.measure }}</strong> {{ item.ingredient }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="instructions">
+        <h2>Modo de preparo</h2>
+        <p>{{ meal.strInstructions|linebreaks }}</p>
+    </section>
+
+    {% if youtube_embed %}
+        <section class="video">
+            <h2>Vídeo</h2>
+            <div class="video-wrapper">
+                <iframe src="{{ youtube_embed }}"
+                        title="{{ meal.strMeal }}"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+            </div>
+            <p class="video-fallback">
+                Vídeo não carrega? <a href="{{ meal.strYoutube }}" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+            </p>
+        </section>
+    {% endif %}
+
+</article>
+{% endblock %}

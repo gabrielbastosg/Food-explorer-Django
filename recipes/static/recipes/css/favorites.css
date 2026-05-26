@@ -1,0 +1,44 @@
+.favorites-section h2 {
+    margin-bottom: 20px;
+    color: var(--text);
+}
+
+.favorite-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.favorite-card a:first-child {
+    flex: 1;
+    color: var(--text);
+}
+
+.favorite-card a:first-child:hover {
+    color: var(--text);
+}
+
+.favorite-card .category {
+    padding: 0 14px 10px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.btn-remove {
+    width: 100%;
+    background: var(--error);
+    border-radius: 0;
+    padding: 10px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.btn-remove:hover {
+    background: #a3372a;
+    color: white;
+}
+
+.favorites-section .empty + .btn {
+    display: block;
+    width: max-content;
+    margin: 0 auto;
+}

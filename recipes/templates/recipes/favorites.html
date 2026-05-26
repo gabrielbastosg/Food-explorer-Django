@@ -1,0 +1,27 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %}Meus favoritos - Food Explorer{% endblock %}
+
+{% block content %}
+<section class="favorites-section">
+    <h2>Meus favoritos</h2>
+
+    {% if favorites %}
+        <div class="meals-grid">
+            {% for fav in favorites %}
+                <div class="meal-card favorite-card">
+                    <a href="{% url 'recipe_detail' fav.meal_id %}">
+                        <img src="{{ fav.thumb }}" alt="{{ fav.title }}">
+                        <h3>{{ fav.title }}</h3>
+                        {% if fav.category %}<p class="category">{{ fav.category }}</p>{% endif %}
+                    </a>
+                    <a href="{% url 'remove_favorite' fav.meal_id %}" class="btn btn-remove">Remover</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty">Você ainda não tem receitas favoritas.</p>
+        <a href="{% url 'home' %}" class="btn">Explorar receitas</a>
+    {% endif %}
+</section>
+{% endblock %}
