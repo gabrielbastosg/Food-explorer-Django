@@ -1,4 +1,5 @@
 {% extends 'recipes/base.html' %}
+{% load recipe_filters %}
 
 {% block title %}{{ meal.strMeal }} - Food Explorer{% endblock %}
 
@@ -9,7 +10,7 @@
         <div class="recipe-info">
             <h1>{{ meal.strMeal }}</h1>
             <p class="recipe-meta">
-                {{ meal.strCategory }} · {{ meal.strArea }}
+                {{ meal.strCategory|traduzir_categoria }} · {{ meal.strArea }}
             </p>
 
             {% if user.is_authenticated %}
@@ -32,9 +33,14 @@
 
     <section class="ingredients">
         <h2>Ingredientes</h2>
-        <ul>
+        <ul class="ingredients-list" data-meal-id="{{ meal.idMeal }}">
             {% for item in ingredients %}
-                <li><strong>{{ item.measure }}</strong> {{ item.ingredient }}</li>
+                <li>
+                    <label>
+                        <input type="checkbox" class="ingredient-check" data-index="{{ forloop.counter0 }}">
+                        <span><strong>{{ item.measure }}</strong> {{ item.ingredient }}</span>
+                    </label>
+                </li>
             {% endfor %}
         </ul>
     </section>

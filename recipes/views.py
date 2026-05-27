@@ -78,6 +78,26 @@ def recipe_detail(request, meal_id):
     })
 
 
+def random_recipe(request):
+    data = requests.get(f'{BASE_URL}/random.php').json()
+    meal = data['meals'][0]
+    ingredients = _build_ingredients(meal)
+    youtube_embed = _youtube_embed(meal.get('strYoutube'))
+
+    is_favorited = False
+    if request.user.is_authenticated:
+        is_favorited = FavoriteRecipe.objects.filter(
+            user=request.user, meal_id=meal['idMeal'],
+        ).exists()
+
+    return render(request, 'recipes/recipe_detail.html', {
+        'meal': meal,
+        'ingredients': ingredients,
+        'youtube_embed': youtube_embed,
+        'is_favorited': is_favorited,
+    })
+
+
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)

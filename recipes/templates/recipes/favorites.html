@@ -1,4 +1,5 @@
 {% extends 'recipes/base.html' %}
+{% load recipe_filters %}
 
 {% block title %}Meus favoritos - Food Explorer{% endblock %}
 
@@ -13,7 +14,7 @@
                     <a href="{% url 'recipe_detail' fav.meal_id %}">
                         <img src="{{ fav.thumb }}" alt="{{ fav.title }}">
                         <h3>{{ fav.title }}</h3>
-                        {% if fav.category %}<p class="category">{{ fav.category }}</p>{% endif %}
+                        {% if fav.category %}<p class="category">{{ fav.category|traduzir_categoria }}</p>{% endif %}
                     </a>
                     <a href="{% url 'remove_favorite' fav.meal_id %}" class="btn btn-remove">Remover</a>
                 </div>

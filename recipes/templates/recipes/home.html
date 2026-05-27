@@ -1,4 +1,5 @@
 {% extends 'recipes/base.html' %}
+{% load recipe_filters %}
 
 {% block title %}Início - Food Explorer{% endblock %}
 
@@ -9,7 +10,7 @@
         {% for cat in categories %}
             <a href="{% url 'home' %}?category={{ cat.strCategory }}"
                class="category-chip {% if cat.strCategory == category_filter %}active{% endif %}">
-                {{ cat.strCategory }}
+                {{ cat.strCategory|traduzir_categoria }}
             </a>
         {% endfor %}
     </div>
@@ -19,7 +20,7 @@
     {% if query %}
         <h2>Resultados para "{{ query }}"</h2>
     {% elif category_filter %}
-        <h2>Categoria: {{ category_filter }}</h2>
+        <h2>Categoria: {{ category_filter|traduzir_categoria }}</h2>
     {% endif %}
 
     {% if meals %}

@@ -22,6 +22,7 @@
 
         <ul class="nav-links">
             <li><a href="{% url 'home' %}">Início</a></li>
+            <li><a href="{% url 'random_recipe' %}">🎲 Aleatória</a></li>
             {% if user.is_authenticated %}
                 <li><a href="{% url 'favorites' %}">❤️ Favoritos ({{ favorite_count }})</a></li>
                 <li class="user-info">Olá, {{ user.username }}</li>
@@ -53,5 +54,6 @@
     <footer class="footer">
         <p>Dados fornecidos por <a href="https://www.themealdb.com" target="_blank">TheMealDB</a></p>
     </footer>
+    <script src="{% static 'recipes/js/checklist.js' %}"></script>
 </body>
 </html>

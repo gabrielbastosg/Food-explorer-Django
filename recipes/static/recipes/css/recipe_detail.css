@@ -123,6 +123,27 @@
     text-align: center;
 }
 
+.ingredients-list label{
+    display: flex;
+    align-items: flex-start;
+    gap:10px;
+    cursor:pointer;
+    user-select: none;
+}
+
+.ingredient-check{
+    margin-top: 4px;
+    width: 16px;
+    height:16px;
+    accent-color: var(--primary);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.ingredient-check:checked + span {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
 @media (max-width: 700px) {
     .recipe-header {
         grid-template-columns: 1fr;
