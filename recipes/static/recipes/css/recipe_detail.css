@@ -143,6 +143,49 @@
     text-decoration: line-through;
     opacity: 0.5;
 }
+.portions-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: var(--bg);
+    border-radius: var(--radius);
+    width: fit-content;
+}
+
+.portions-label {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.portions-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.portions-btn:hover {
+    background: var(--primary-dark);
+}
+
+.portions-display {
+    min-width: 36px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 1.1rem;
+}
 
 @media (max-width: 700px) {
     .recipe-header {

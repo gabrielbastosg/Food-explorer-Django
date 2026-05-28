@@ -10,7 +10,7 @@
         <div class="recipe-info">
             <h1>{{ meal.strMeal }}</h1>
             <p class="recipe-meta">
-                {{ meal.strCategory|traduzir_categoria }} · {{ meal.strArea }}
+                {{ meal.strCategory|traduzir_categoria }} · {{ meal.strArea|traduzir_cozinha }}
             </p>
 
             {% if user.is_authenticated %}
@@ -33,12 +33,23 @@
 
     <section class="ingredients">
         <h2>Ingredientes</h2>
+
+        <div class="portions-control">
+            <span class="portions-label">🍽️ Porções:</span>
+            <button type="button" class="portions-btn" id="portions-minus" aria-label="Diminuir porções">−</button>
+            <span class="portions-display" id="portions-display">x1</span>
+            <button type="button" class="portions-btn" id="portions-plus" aria-label="Aumentar porções">+</button>
+        </div>
+
         <ul class="ingredients-list" data-meal-id="{{ meal.idMeal }}">
             {% for item in ingredients %}
                 <li>
                     <label>
                         <input type="checkbox" class="ingredient-check" data-index="{{ forloop.counter0 }}">
-                        <span><strong>{{ item.measure }}</strong> {{ item.ingredient }}</span>
+                        <span>
+                            <strong class="measure" data-original="{{ item.measure }}">{{ item.measure }}</strong>
+                            {{ item.ingredient }}
+                        </span>
                     </label>
                 </li>
             {% endfor %}

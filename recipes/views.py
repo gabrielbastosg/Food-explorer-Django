@@ -4,12 +4,20 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 
 from .models import FavoriteRecipe
 
 TMDB_KEY = config('THEMEALDB_API_KEY', default='1')
 BASE_URL = f'https://www.themealdb.com/api/json/v1/{TMDB_KEY}'
+
+POPULAR_AREAS = [
+    'Italian', 'Mexican', 'Japanese', 'Chinese', 'Thai',
+    'Greek', 'Spanish', 'Portuguese', 'British', 'Turkish',
+    'Vietnamese', 'Moroccan', 'Polish', 'Russian', 'Jamaican',
+    'Egyptian', 'Filipino',
+]
 
 
 def _build_ingredients(meal):
@@ -36,9 +44,13 @@ def _youtube_embed(url):
 def home(request):
     query = request.GET.get('q', '').strip()
     category_filter = request.GET.get('category', '').strip()
+    area_filter = request.GET.get('area', '').strip()
 
     if query:
         data = requests.get(f'{BASE_URL}/search.php', params={'s': query}).json()
+        meals = data.get('meals') or []
+    elif area_filter:
+        data = requests.get(f'{BASE_URL}/filter.php', params={'a': area_filter}).json()
         meals = data.get('meals') or []
     elif category_filter:
         data = requests.get(f'{BASE_URL}/filter.php', params={'c': category_filter}).json()
@@ -50,11 +62,17 @@ def home(request):
 
     categories = requests.get(f'{BASE_URL}/categories.php').json().get('categories', [])
 
+    paginator = Paginator(meals, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, 'recipes/home.html', {
-        'meals': meals,
+        'page_obj': page_obj,
         'query': query,
         'category_filter': category_filter,
+        'area_filter': area_filter,
         'categories': categories,
+        'areas': POPULAR_AREAS,
     })
 
 
@@ -149,3 +167,29 @@ def remove_favorite(request, meal_id):
     if deleted:
         messages.success(request, 'Receita removida dos favoritos.')
     return redirect('favorites')
+
+@login_required
+def shopping_list(request):
+    favorites = FavoriteRecipe.objects.filter(user=request.user)
+
+    shopping = {}
+    for fav in favorites:
+        data = requests.get(f'{BASE_URL}/lookup.php', params={'i': fav.meal_id}).json()
+        meal = (data.get('meals') or [None])[0]
+        if not meal:
+            continue
+        for item in _build_ingredients(meal):
+            ing = item['ingredient']
+            if ing not in shopping:
+                shopping[ing] = []
+            shopping[ing].append({
+                'measure': item['measure'],
+                'recipe_title': fav.title,
+            })
+
+    shopping_sorted = dict(sorted(shopping.items()))
+
+    return render(request, 'recipes/shopping_list.html', {
+        'shopping': shopping_sorted,
+        'recipe_count': favorites.count(),
+    })

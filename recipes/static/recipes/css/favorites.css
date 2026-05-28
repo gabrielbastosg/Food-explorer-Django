@@ -42,3 +42,59 @@
     width: max-content;
     margin: 0 auto;
 }
+
+.shopping-section h2 {
+    margin-bottom: 8px;
+    color: var(--text);
+}
+
+.shopping-meta {
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.shopping-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.shopping-item {
+    background: var(--bg-card);
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.shopping-item h3 {
+    font-size: 1.05rem;
+    margin-bottom: 8px;
+    color: var(--text);
+}
+
+.shopping-item .sources {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.shopping-item .sources li {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    padding: 4px 0;
+    border-top: 1px dashed var(--border);
+}
+
+.shopping-item .sources li:first-child {
+    border-top: none;
+}
+
+.shopping-item .sources strong {
+    color: var(--primary);
+}
+
+.source-recipe {
+    font-style: italic;
+}

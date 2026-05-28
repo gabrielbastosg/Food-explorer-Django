@@ -9,4 +9,5 @@ urlpatterns = [
     path('favorites/', views.favorites, name='favorites'),
     path('favorite/remove/<str:meal_id>/', views.remove_favorite, name='remove_favorite'),
     path('random/', views.random_recipe, name='random_recipe'),
+    path('shopping-list/', views.shopping_list, name='shopping_list'),
 ]

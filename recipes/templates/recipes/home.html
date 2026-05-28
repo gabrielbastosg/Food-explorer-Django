@@ -16,22 +16,56 @@
     </div>
 </section>
 
-<section class="results">
-    {% if query %}
-        <h2>Resultados para "{{ query }}"</h2>
-    {% elif category_filter %}
-        <h2>Categoria: {{ category_filter|traduzir_categoria }}</h2>
-    {% endif %}
+<section class="cuisines-bar">
+    <h2>Cozinhas</h2>
+    <div class="categories-list">
+        {% for area in areas %}
+            <a href="{% url 'home' %}?area={{ area }}"
+               class="category-chip {% if area == area_filter %}active{% endif %}">
+                {{ area|traduzir_cozinha }}
+            </a>
+        {% endfor %}
+    </div>
+</section>
 
-    {% if meals %}
+<section class="results">
+    <div class="results-header">
+        {% if query %}
+            <h2>Resultados para "{{ query }}"</h2>
+        {% elif area_filter %}
+            <h2>Cozinha: {{ area_filter|traduzir_cozinha }}</h2>
+        {% elif category_filter %}
+            <h2>Categoria: {{ category_filter|traduzir_categoria }}</h2>
+        {% endif %}
+
+        {% if request.GET %}
+            <a href="{% url 'home' %}" class="clear-filters">× Limpar filtros</a>
+        {% endif %}
+    </div>
+
+    {% if page_obj.object_list %}
         <div class="meals-grid">
-            {% for meal in meals %}
+            {% for meal in page_obj %}
                 <a href="{% url 'recipe_detail' meal.idMeal %}" class="meal-card">
                     <img src="{{ meal.strMealThumb }}" alt="{{ meal.strMeal }}">
                     <h3>{{ meal.strMeal }}</h3>
                 </a>
             {% endfor %}
         </div>
+
+        {% if page_obj.has_other_pages %}
+            <nav class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?{% if query %}q={{ query }}{% elif area_filter %}area={{ area_filter }}{% else %}category={{ category_filter }}{% endif %}&page={{ page_obj.previous_page_number }}" class="pagination-btn">← Anterior</a>
+                {% endif %}
+
+                <span class="pagination-info">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+
+                {% if page_obj.has_next %}
+                    <a href="?{% if query %}q={{ query }}{% elif area_filter %}area={{ area_filter }}{% else %}category={{ category_filter }}{% endif %}&page={{ page_obj.next_page_number }}" class="pagination-btn">Próximo →</a>
+                {% endif %}
+            </nav>
+        {% endif %}
     {% else %}
         <p class="empty">Nenhuma receita encontrada.</p>
     {% endif %}

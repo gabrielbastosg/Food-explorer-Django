@@ -1,0 +1,32 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %}Lista de compras - Food Explorer{% endblock %}
+
+{% block content %}
+<section class="shopping-section">
+    <h2>📋 Lista de compras</h2>
+    {% if recipe_count %}
+        <p class="shopping-meta">Baseado em {{ recipe_count }} receita{{ recipe_count|pluralize:"s" }} favorita{{ recipe_count|pluralize:"s" }}.</p>
+    {% endif %}
+
+    {% if shopping %}
+        <ul class="shopping-list">
+            {% for ingredient, sources in shopping.items %}
+                <li class="shopping-item">
+                    <h3>🛒 {{ ingredient }}</h3>
+                    <ul class="sources">
+                        {% for source in sources %}
+                            <li>
+                                {% if source.measure %}<strong>{{ source.measure }}</strong> · {% endif %}
+                                <span class="source-recipe">{{ source.recipe_title }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="empty">Você ainda não tem receitas favoritas. <a href="{% url 'home' %}">Explorar receitas</a></p>
+    {% endif %}
+</section>
+{% endblock %}
