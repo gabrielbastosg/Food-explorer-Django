@@ -25,12 +25,7 @@
     transition: all 0.2s;
 }
 
-.category-chip:hover {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-}
-
+.category-chip:hover,
 .category-chip.active {
     background: var(--primary);
     color: white;
